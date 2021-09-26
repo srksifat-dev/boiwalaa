@@ -1,0 +1,161 @@
+import 'package:boiwalaa_dummy/image_slider.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:velocity_x/velocity_x.dart';
+
+import 'author_screen.dart';
+import 'category_screen.dart';
+import 'home_screen.dart';
+import 'offer_screen.dart';
+import 'publication_screen.dart';
+
+class MainScreen extends StatefulWidget {
+  const MainScreen({Key? key}) : super(key: key);
+
+  @override
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  bool scrollUp = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return DefaultTabController(
+      length: 5,
+      child: Scaffold(
+        body: SafeArea(
+          child: Stack(
+            children: [
+              Padding(
+                padding: scrollUp
+                    ? const EdgeInsets.only(top: 51)
+                    : EdgeInsets.only(
+                        top: 101 + context.percentWidth * 5,
+                      ),
+                child: SizedBox(
+                  height: context.percentHeight * 100,
+                  width: context.percentWidth * 100,
+                  child: NotificationListener<UserScrollNotification>(
+                      onNotification: (notification) {
+                        if (notification.direction == ScrollDirection.reverse) {
+                          if (!scrollUp) {
+                            setState(() {
+                              scrollUp = true;
+                            });
+                          }
+                        } else if (notification.direction ==
+                            ScrollDirection.forward) {
+                          if (scrollUp) {
+                            setState(() {
+                              scrollUp = false;
+                            });
+                          }
+                        }
+                        return true;
+                      },
+                      child: const TabBarView(children: [
+                        HomeScreen(),
+                        OfferScreen(),
+                        CategoryScreen(),
+                        AuthorScreen(),
+                        PublicationScreen(),
+                      ])),
+                ),
+              ),
+              AnimatedPositioned(
+                top: scrollUp ? -61 : 0,
+                left: 0,
+                right: 0,
+                duration: const Duration(milliseconds: 200),
+                child: SizedBox(
+                  height: 111,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 60,
+                        color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                              horizontal: context.percentWidth * 5),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Center(child: "Boiwalaa".text.xl2.bold.make()),
+                              SizedBox(
+                                child: Row(
+                                  children: [
+                                    SvgPicture.asset(
+                                      "assets/images/user.svg",
+                                      height: 30,
+                                    ),
+                                    WidthBox(context.percentWidth * 5),
+                                    SvgPicture.asset(
+                                      "assets/images/chat.svg",
+                                      height: 30,
+                                    ),
+                                    WidthBox(context.percentWidth * 5),
+                                    SvgPicture.asset(
+                                      "assets/images/cart.svg",
+                                      height: 30,
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 1,
+                        color: Colors.grey[200],
+                      ),
+                      Container(
+                        alignment: Alignment.bottomCenter,
+                        height: 50,
+                        color: Colors.white,
+                        child: TabBar(tabs: [
+                          Tab(
+                            child: SvgPicture.asset(
+                              "assets/images/home.svg",
+                              height: 30,
+                            ),
+                          ),
+                          Tab(
+                            child: SvgPicture.asset(
+                              "assets/images/offer.svg",
+                              height: 30,
+                            ),
+                          ),
+                          Tab(
+                            child: SvgPicture.asset(
+                              "assets/images/category.svg",
+                              height: 30,
+                            ),
+                          ),
+                          Tab(
+                            child: SvgPicture.asset(
+                              "assets/images/author.svg",
+                              height: 30,
+                            ),
+                          ),
+                          Tab(
+                            child: SvgPicture.asset(
+                              "assets/images/publication.svg",
+                              height: 30,
+                            ),
+                          ),
+                        ]),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
