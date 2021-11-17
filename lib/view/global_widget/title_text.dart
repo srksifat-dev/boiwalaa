@@ -1,0 +1,28 @@
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+
+class TitleText extends StatelessWidget {
+  final String? text;
+  final double fontSize;
+  final Color color;
+  final FontWeight fontWeight;
+  final TextDecoration? textDecoration;
+  const TitleText(
+      {Key? key,
+      this.textDecoration,
+      this.text,
+      this.fontSize = 18,
+      this.color = Colors.black,
+      this.fontWeight = FontWeight.w800})
+      : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return Text(text!,
+        style: GoogleFonts.poppins(
+            fontSize: fontSize,
+            fontWeight: fontWeight,
+            color: color,
+            textStyle: TextStyle(decoration: textDecoration)));
+  }
+}
