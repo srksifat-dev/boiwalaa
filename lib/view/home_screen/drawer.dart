@@ -1,6 +1,7 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:boiwalaa/controller/user_controller.dart';
 import '/controller/auth_controller.dart';
-import '/controller/messaage_controller.dart';
+import '../../controller/message_controller.dart';
 import '/controller/order_controller.dart';
 import '/view/account_screen/account_screen.dart';
 import '/view/home_screen/footer.dart';
@@ -17,6 +18,7 @@ class MyDrawer extends StatelessWidget {
   MyDrawer({Key? key}) : super(key: key);
   final authController = Get.find<AuthController>();
   final orderController = Get.find<OrderController>();
+  final userController = Get.find<UserController>();
 
   final messageController = Get.find<MessageController>();
 
@@ -79,15 +81,16 @@ class MyDrawer extends StatelessWidget {
                       ),
                     ),
                     ElasticInRight(
-                        delay: const Duration(milliseconds: 100),
-                        child: SizedBox(
-                            width: context.percentWidth * 60,
-                            child: authController.name
-                                .text
-                                .ellipsis
+                      delay: const Duration(milliseconds: 100),
+                      child: SizedBox(
+                          width: context.percentWidth * 60,
+                          child: Obx(
+                            () => userController.user!.name.text.ellipsis
                                 .maxLines(1)
                                 .xl
-                                .makeCentered())),
+                                .makeCentered(),
+                          )),
+                    ),
                   ],
                 )),
             ListTile(
@@ -143,8 +146,9 @@ class MyDrawer extends StatelessWidget {
             // Divider(),
             GestureDetector(
               onTap: () {
+                print(userController.obsAddressList.length);
                 Get.back();
-                Get.to(() => const AccountScreen());
+                Get.to(() => AccountScreen());
               },
               child: ListTile(
                 leading: ElasticInRight(

@@ -1,74 +1,71 @@
-import 'package:boiwalaa/model/user.dart';
+import 'package:boiwalaa/controller/user_controller.dart';
 import 'package:boiwalaa/view/global_widget/custom_snackbar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:password_strength/password_strength.dart';
 
-import '/model/address.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
-  FirebaseAuth _auth = FirebaseAuth.instance;
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final userController = Get.put(UserController());
+  // Firebase instances
+
+  final Stream<QuerySnapshot> usersStream =
+      FirebaseFirestore.instance.collection('users').snapshots();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
   late Rx<User?> firebaseUser;
-  Rx<UserModel> userModel = UserModel().obs;
-
+  // User? get firebaseUser => _firebaseUser.value;
   late CollectionReference collectionReference;
+// TextEditing Controllers
+  // TextEditingController nameController = TextEditingController();
+  // TextEditingController contactNumberController = TextEditingController();
+  // TextEditingController passwordController = TextEditingController();
+  // TextEditingController confirmPasswordController = TextEditingController();
+  // TextEditingController otpController = TextEditingController();
 
-  var addressList = List<Address>.empty(growable: true).obs;
+// Focus Nodes
+  // FocusNode nameFocusNode = FocusNode();
+  // FocusNode contactNumberFocusNode = FocusNode();
+  // FocusNode passwordFocusNode = FocusNode();
+  // FocusNode confirmPasswordFocusNode = FocusNode();
+  // FocusNode otpFocusNode = FocusNode();
 
-  var name = "Boiwalaa";
-  var email = "yourEmail@example.com";
-  var password = "";
-  var contactNumber = "";
+// Form keys
+  GlobalKey<FormState> signInFormKey = GlobalKey<FormState>();
+  GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
+
+// Observable variables
+
+  String verificationId = "";
 
   @override
   void onInit() async {
-    firebaseUser = Rx<User?>(_auth.currentUser);
-    firebaseUser.bindStream(_auth.userChanges());
+    firebaseUser = Rx<User?>(auth.currentUser);
+    firebaseUser.bindStream(auth.authStateChanges());
     collectionReference = firestore.collection("users");
+
     super.onInit();
   }
 
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
-  }
+// validators
 
-  @override
-  void onClose() {
-    super.onClose();
-  }
-
-  Future<void> addUser(UserModel userModel) {
-    return collectionReference
-        .doc(userModel.contactNumber.toString())
-        .collection("account")
-        .doc("details")
-        .set(userModel.toMap())
-        .catchError((error) {
-      messageSnackbar("Add User Error", error.message);
-    });
-  }
-
-  Future<UserModel> fetchUser(String userId) {
-    return collectionReference
-        .doc(userId)
-        .collection("account")
-        .doc("details")
-        .get()
-        .then((snapshot) => UserModel.fromFirestore(snapshot.data()));
+  String? validateName(String value) {
+    if (value.isEmpty) {
+      return "Enter your name";
+    } else if (value.length < 3) {
+      return "Enter your real name";
+    }
+    return null;
   }
 
   String? validateContactNumber(String value) {
     if (value.isEmpty) {
       return "Enter contact number";
     }
-    if (!value.startsWith("01") || value.length < 11) {
+    if (!value.startsWith("1") || value.length < 10) {
       return "Enter valid Contact Number";
     }
     return null;
@@ -95,9 +92,19 @@ class AuthController extends GetxController {
     return null;
   }
 
-  void signOut() async {
+  String? validateEmail(String value) {
+    if (value.isEmpty) {
+      return "Enter email address";
+    } else if (!GetUtils.isEmail(value)) {
+      return "Enter valid email";
+    }
+    return null;
+  }
+
+  Future<void> signOut() async {
     try {
-      await _auth.signOut();
+      await auth.signOut();
+      userController.clear();
     } on FirebaseAuthException catch (e) {
       messageSnackbar("Sign Out Error", "${e.message}");
     }

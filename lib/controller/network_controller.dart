@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:boiwalaa/view/global_widget/custom_snackbar.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 

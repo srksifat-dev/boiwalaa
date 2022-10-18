@@ -1,4 +1,4 @@
-import '/controller/messaage_controller.dart';
+import '../../controller/message_controller.dart';
 import '/view/message/message_card.dart';
 import '/view/theme/colors.dart';
 import 'package:flutter/material.dart';
@@ -14,8 +14,9 @@ class MessageScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: "Messages".text.make(),
-        backgroundColor: AppColors.green,
+        iconTheme: const IconThemeData(color: Colors.black),
+        title: "Messages".text.black.make(),
+        backgroundColor: Colors.white,
       ),
       body: Padding(
         padding: EdgeInsets.all(context.percentWidth * 5),
@@ -26,11 +27,13 @@ class MessageScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final message = messageController.messageList[index];
                   return MessageCard(
-                      title: message.title,
-                      startingMessageBody: message.startingMessageBody,
-                      endingMessageBody: message.endingMessageBody,
-                      dateTime: message.dateTime,
-                      couponCode: message.couponCode,copyable: message.copyable,);
+                    title: message.title,
+                    startingMessageBody: message.startingMessageBody,
+                    endingMessageBody: message.endingMessageBody,
+                    dateTime: message.dateTime,
+                    couponCode: message.couponCode,
+                    copyable: message.copyable,
+                  );
                 }),
       ),
     );

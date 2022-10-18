@@ -1,10 +1,10 @@
 import '/model/book.dart';
 
-class CartItem {
+class CartItemModel {
   int quantity;
-  final Book book;
+  final BookModel book;
 
-  CartItem({
+  CartItemModel({
     this.quantity = 1,
     required this.book,
   });

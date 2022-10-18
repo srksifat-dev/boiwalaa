@@ -16,17 +16,15 @@ class OrderScreenDetails extends StatelessWidget {
   }) : super(key: key);
   final authController = Get.find<AuthController>();
   final int index;
-  final List<OrderItem> orderItems;
+  final List<OrderItemModel> orderItems;
 
   @override
   Widget build(BuildContext context) {
     final cartItems = orderItems[index].cartItem;
     final orderItem = orderItems[index];
     return Scaffold(
-      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: orderItems[index].orderID.text.make(),
-        backgroundColor: AppColors.green,
       ),
       body: Padding(
         padding: EdgeInsets.all(context.percentWidth * 5),
@@ -37,7 +35,7 @@ class OrderScreenDetails extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(context.percentWidth * 3),
-                  color: AppColors.green.withOpacity(0.2),
+                  color: Colors.grey[200],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -55,7 +53,7 @@ class OrderScreenDetails extends StatelessWidget {
                     EdgeInsets.symmetric(horizontal: context.percentWidth * 5),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(context.percentWidth * 3),
-                  color: AppColors.green.withOpacity(0.2),
+                  color: Colors.grey[200],
                 ),
                 width: double.infinity,
                 child: Column(
@@ -120,7 +118,7 @@ class OrderScreenDetails extends StatelessWidget {
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(context.percentWidth * 3),
-                  color: AppColors.green.withOpacity(0.2),
+                  color: Colors.grey[200],
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,

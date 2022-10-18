@@ -29,6 +29,7 @@ environment:
 dependencies:
   animate_do: ^2.0.0
   animated_text_kit: ^4.2.1
+  auto_size_text: ^3.0.0-nullsafety.0
   badges: ^2.0.1
   carousel_slider: ^4.0.0
   country_state_city_pro: ^0.0.3
@@ -60,6 +61,11 @@ dependencies:
   firebase_auth: ^3.1.1
   pinput: ^1.2.0
   cloud_firestore: ^2.5.3
+  google_fonts: ^2.1.0
+  connectivity_plus: ^1.1.0
+  flutter_rating_bar: ^4.0.0
+  mongo_dart: ^0.7.2
+  postgres: ^2.4.2
 
 dev_dependencies:
   flutter_test:

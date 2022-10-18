@@ -14,7 +14,7 @@ TextFormField customTextField({
   bool obscureText = false,
   Widget? suffixIcon,
   TextInputAction textInputAction = TextInputAction.next,
-  required void Function(String) onFieldSubmitted,
+  void Function(String)? onFieldSubmitted,
   int? maxLength,
   String? Function(String?)? validator,
   void Function(String?)? onSaved,

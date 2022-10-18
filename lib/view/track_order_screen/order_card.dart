@@ -9,7 +9,8 @@ import 'package:velocity_x/velocity_x.dart';
 
 import 'order_screen_details.dart';
 
-Widget orderCard(BuildContext context, List<OrderItem> orderItems, int index) {
+Widget orderCard(
+    BuildContext context, List<OrderItemModel> orderItems, int index) {
   final orderItem = orderItems[index];
   return GestureDetector(
     onTap: orderItem.orderStep == OrderStep.waitForConfirmation
@@ -32,7 +33,7 @@ Widget orderCard(BuildContext context, List<OrderItem> orderItems, int index) {
       decoration: BoxDecoration(
           borderRadius:
               BorderRadius.all(Radius.circular(context.percentWidth * 3)),
-          color: AppColors.green.withOpacity(0.2)),
+          color: Colors.grey[200]),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -77,14 +78,14 @@ Widget orderCard(BuildContext context, List<OrderItem> orderItems, int index) {
                 style: TextStyle(
                   fontSize: context.percentWidth * 5,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.deepAmber,
+                  color: Colors.black,
                 ),
               ),
               Container(
                 // margin: EdgeInsets.only(right: 10),
                 padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 8),
                 decoration: const BoxDecoration(
-                    color: AppColors.mediumAmber,
+                    color: AppColors.deepAmber,
                     // border: Border.all(
                     //   color: LightColor.customBlack,
                     //   width: 1,

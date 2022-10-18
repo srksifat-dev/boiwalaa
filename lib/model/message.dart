@@ -1,4 +1,4 @@
-class Message {
+class MessageModel {
   final String id;
   final String title;
   final String startingMessageBody;
@@ -7,7 +7,7 @@ class Message {
   final String couponCode;
   final bool copyable;
 
-  Message({
+  MessageModel({
     required this.id,
     required this.title,
     required this.startingMessageBody,

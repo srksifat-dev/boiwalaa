@@ -51,16 +51,17 @@ class _MainScreenState extends State<MainScreen> {
   DateTime? lastPressed;
 
   @override
-  void initState() {
-    userController.obsUser.bindStream(Database().getUser());
-    userController.obsAddressList.bindStream(Database().getAddressList());
+  void initState() async{
+    userController.user = await Database().fetchUser();
+    // userController.obsUser.bindStream(Database().getUser());
+    // userController.obsAddressList.bindStream(Database().getAddressList());
     final initScreen = GetStorage().read("initScreen");
     initScreen == 0 || initScreen == null
         ? Future.delayed(Duration(seconds: 2)).then((_) {
             messageController.showMessageOnTheFly(
-              title: userController.user.name == "Your name"
+              title: userController.user!.name == "Your name"
                   ? "Welcome to Boiwalaa"
-                  : "Welcome ${userController.user.name} to Boiwalaa",
+                  : "Welcome ${userController.user!.name} to Boiwalaa",
               startingMessageBody:
                   "Get extra 50% discount in your first purchase! Just use ",
               endingMessageBody: "coupon code.",
@@ -69,9 +70,9 @@ class _MainScreenState extends State<MainScreen> {
           })
         : Future.delayed(const Duration(seconds: 2)).then((_) {
             messageController.showMessageOnTheFly(
-                title: userController.user.name == "Your name"
+                title: userController.user!.name == "Your name"
                     ? "Welcome back to Boiwalaa"
-                    : "Welcome back ${userController.user.name}",
+                    : "Welcome back ${userController.user!.name}",
                 startingMessageBody:
                     "You get 10% extra discount offer! Just use ",
                 endingMessageBody: " coupon code",
@@ -93,7 +94,7 @@ class _MainScreenState extends State<MainScreen> {
           lastPressed = DateTime.now();
 
           await Future.delayed(const Duration(milliseconds: 100));
-          SchedulerBinding.instance?.addPostFrameCallback((_) {
+          SchedulerBinding.instance.addPostFrameCallback((_) {
             _scrollController.animateTo(
                 _scrollController.position.minScrollExtent,
                 duration: const Duration(milliseconds: 500),

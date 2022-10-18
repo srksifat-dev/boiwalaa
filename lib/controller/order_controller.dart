@@ -3,17 +3,17 @@ import '/model/order.dart';
 import 'package:get/get.dart';
 
 class OrderController extends GetxController {
-  var orderList = List<OrderItem>.empty(growable: true).obs;
+  var orderList = List<OrderItemModel>.empty(growable: true).obs;
   DeliveryMethod deliveryMethod = DeliveryMethod.cod;
   DeliveryPlace deliveryPlace = DeliveryPlace.inside;
   // var deliveryCost = 0.obs;
   // var orders = List<CartItem>.empty(growable: true).obs;
 
-  int sumOrderPrice(List<CartItem> cartList) {
+  int sumOrderPrice(List<CartItemModel> cartList) {
     return cartList.fold(
         0,
         (previousValue, element) =>
-            previousValue + element.book.discountedPrice * element.quantity);
+            previousValue + element.book.discountedPercent * element.quantity);
   }
 
   int deliveryCharge(DeliveryPlace deliveryPlace, DeliveryMethod method) {
@@ -37,7 +37,7 @@ class OrderController extends GetxController {
   //   orders.add(cartItem);
   // }
 
-  void addOrder(OrderItem orderItem) {
+  void addOrder(OrderItemModel orderItem) {
     orderList.add(orderItem);
   }
 }

@@ -16,9 +16,9 @@ enum DeliveryMethod {
 
 enum DeliveryPlace { inside, outside }
 
-class OrderItem {
+class OrderItemModel {
   String orderID;
-  final List<CartItem> cartItem;
+  final List<CartItemModel> cartItem;
   String orderTime;
   OrderStep orderStep;
   DeliveryMethod deliveryMethod;
@@ -32,7 +32,7 @@ class OrderItem {
   String email;
   String contactNo;
 
-  OrderItem({
+  OrderItemModel({
     required this.orderID,
     required this.cartItem,
     required this.orderTime,

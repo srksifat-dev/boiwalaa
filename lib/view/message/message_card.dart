@@ -37,7 +37,7 @@ class MessageCard extends StatelessWidget {
       margin: EdgeInsets.only(bottom: context.percentWidth * 3),
       width: double.infinity,
       decoration: BoxDecoration(
-        color: AppColors.green.withOpacity(0.2),
+        color: Colors.grey[200],
         borderRadius: BorderRadius.circular(context.percentWidth * 3),
       ),
       child: Column(

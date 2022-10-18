@@ -4,10 +4,10 @@ import 'package:boiwalaa/services/database.dart';
 import 'package:get/get.dart';
 
 class UserController extends GetxController {
-  final Rx<UserModel> obsUser = UserModel().obs;
-  UserModel get user => obsUser.value;
+  // final Rx<UserModel> obsUser = UserModel().obs;
+  UserModel? user;
 
-  set user(UserModel value) => obsUser.value = value;
+  // set user(UserModel value) => obsUser.value = value;
 
   final RxList<AddressModel> obsAddressList =
       List<AddressModel>.empty(growable: true).obs;
@@ -15,7 +15,7 @@ class UserController extends GetxController {
   get addressList => obsAddressList;
 
   void clear() {
-    obsUser.value = UserModel();
+    // obsUser.value = UserModel();
   }
 
   @override

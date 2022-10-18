@@ -17,23 +17,22 @@ class TrackOrder extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: "Track your order".text.make(),
-        backgroundColor: AppColors.green,
       ),
       body: Padding(
-              padding: EdgeInsets.only(
-                left: context.percentWidth * 5,
-                right: context.percentWidth * 5,
-                top: context.percentWidth * 5,
-              ),
-              child: ListView.builder(
-                  itemCount: orderController.orderList.length,
-                  itemBuilder: (context, index) {
-                    final orderItems = orderController.orderList;
-                    final reverseOrderList =
-                        List<OrderItem>.from(orderItems.reversed);
-                    return orderCard(context, reverseOrderList, index);
-                  }),
-            ),
+        padding: EdgeInsets.only(
+          left: context.percentWidth * 5,
+          right: context.percentWidth * 5,
+          top: context.percentWidth * 5,
+        ),
+        child: ListView.builder(
+            itemCount: orderController.orderList.length,
+            itemBuilder: (context, index) {
+              final orderItems = orderController.orderList;
+              final reverseOrderList =
+                  List<OrderItemModel>.from(orderItems.reversed);
+              return orderCard(context, reverseOrderList, index);
+            }),
+      ),
     );
   }
 }

@@ -1,4 +1,10 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:boiwalaa/controller/user_controller.dart';
+import 'package:boiwalaa/model/user.dart';
+import 'package:boiwalaa/services/database.dart';
+import 'package:boiwalaa/view/global_widget/custom_snackbar.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:get_storage/get_storage.dart';
 import '/model/address.dart';
 import 'package:country_state_city_pro/country_state_city_pro.dart';
 import 'package:flutter/material.dart';
@@ -23,6 +29,8 @@ class AddressDialogContent extends StatefulWidget {
 
 class _AddressDialogContentState extends State<AddressDialogContent> {
   final authController = Get.find<AuthController>();
+  final userController = Get.find<UserController>();
+
   final TextEditingController addressName = TextEditingController();
   final TextEditingController country = TextEditingController();
   final TextEditingController state = TextEditingController();
@@ -135,103 +143,11 @@ class _AddressDialogContentState extends State<AddressDialogContent> {
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (term) {
                         detailAddressFocusNode.unfocus();
-                        setState(() {
-                          _buttonState = ButtonState.loading;
-                        });
-                        addressName.text.isNotEmpty &&
-                                state.text.isNotEmpty &&
-                                detailAddress.text.isNotEmpty &&
-                                country.text.isNotEmpty &&
-                                city.text.isNotEmpty
-                            ? Future.delayed(const Duration(seconds: 2))
-                                .then((_) => setState(() {
-                                      _buttonState = ButtonState.success;
-                                      authController.addressList.add(Address(
-                                        addressName: addressName.text,
-                                        country: country.text,
-                                        state: state.text,
-                                        city: city.text,
-                                        detailAddress: detailAddress.text,
-                                      ));
-                                    }))
-                                .then((_) =>
-                                    Future.delayed(const Duration(milliseconds: 800)))
-                                .then((_) {
-                                Get.back();
-                                Get.to(() => AddressBook());
-                              })
-                            : Future.delayed(const Duration(seconds: 2))
-                                .then((_) => setState(() {
-                                      _buttonState = ButtonState.fail;
-                                    }))
-                                .then((_) =>
-                                    Future.delayed(const Duration(milliseconds: 500)))
-                                .then((_) => _buttonState = ButtonState.idle);
                       },
                       hintText: "Detail Address",
                       fillColor: AppColors.green.withOpacity(0.2),
                       borderColor: AppColors.green,
                     ),
-                    HeightBox(context.percentHeight * 2),
-                    ProgressButton.icon(
-                        iconedButtons: const {
-                          ButtonState.idle: IconedButton(
-                              icon: Icon(Icons.arrow_forward,
-                                  color: Colors.white),
-                              color: AppColors.green),
-                          ButtonState.loading:
-                              IconedButton(color: AppColors.green),
-                          ButtonState.fail: IconedButton(
-                              text: "Failed",
-                              icon: Icon(Icons.cancel, color: Colors.white),
-                              color: AppColors.deepAmber),
-                          ButtonState.success: IconedButton(
-                              text: "Success",
-                              icon: Icon(
-                                Icons.check_circle,
-                                color: Colors.white,
-                              ),
-                              color: AppColors.green)
-                        },
-                        onPressed: () {
-                          // countryFocusNode.unfocus();
-                          // stateFocusNode.unfocus();
-                          // cityFocusNode.unfocus();
-                          detailAddressFocusNode.unfocus();
-                          setState(() {
-                            _buttonState = ButtonState.loading;
-                          });
-                          addressName.text.isNotEmpty &&
-                                  state.text.isNotEmpty &&
-                                  detailAddress.text.isNotEmpty &&
-                                  country.text.isNotEmpty &&
-                                  city.text.isNotEmpty
-                              ? Future.delayed(const Duration(seconds: 2))
-                                  .then((_) => setState(() {
-                                        _buttonState = ButtonState.success;
-                                        authController.addressList.add(Address(
-                                          addressName: addressName.text,
-                                          country: country.text,
-                                          state: state.text,
-                                          city: city.text,
-                                          detailAddress: detailAddress.text,
-                                        ));
-                                      }))
-                                  .then((_) => Future.delayed(
-                                      const Duration(milliseconds: 800)))
-                                  .then((_) {
-                                  Get.back();
-                                  Get.to(() => AddressBook());
-                                })
-                              : Future.delayed(const Duration(seconds: 2))
-                                  .then((_) => setState(() {
-                                        _buttonState = ButtonState.fail;
-                                      }))
-                                  .then((_) => Future.delayed(
-                                      const Duration(milliseconds: 500)))
-                                  .then((_) => _buttonState = ButtonState.idle);
-                        },
-                        state: _buttonState),
                     HeightBox(context.percentHeight * 20),
                   ],
                 ),
@@ -240,7 +156,61 @@ class _AddressDialogContentState extends State<AddressDialogContent> {
           ),
         ),
         Positioned(
-          bottom: context.percentHeight * 15,
+          bottom: context.percentHeight * 20,
+          left: context.percentWidth * 25,
+          right: context.percentWidth * 25,
+          child: ElasticIn(
+            duration: const Duration(milliseconds: 1000),
+            child: ProgressButton.icon(
+              state: _buttonState,
+              onPressed: () async {
+                // nameFocusNode.unfocus();
+                // contactNumberFocusNode.unfocus();
+                // emailFocusNode.unfocus();
+
+                try {
+                  setState(() {
+                    _buttonState = ButtonState.loading;
+                  });
+                  await Database().addAddress(
+                    GetStorage().read("contactNumber"),
+                    addressName.text,
+                    country.text,
+                    state.text,
+                    city.text,
+                    detailAddress.text,
+                  );
+                  setState(() {
+                    _buttonState = ButtonState.success;
+                  });
+                  Get.back();
+                  Get.to(() => AddressBook());
+                } on FirebaseException catch (e) {
+                  messageSnackbar("Updating Error", e.message!);
+                }
+              },
+              iconedButtons: {
+                ButtonState.idle: const IconedButton(
+                    icon: Icon(Icons.arrow_forward, color: Colors.white),
+                    color: AppColors.green),
+                ButtonState.loading: const IconedButton(color: AppColors.green),
+                ButtonState.fail: IconedButton(
+                    text: "Failed",
+                    icon: const Icon(Icons.cancel, color: Colors.white),
+                    color: Colors.red.shade400),
+                ButtonState.success: const IconedButton(
+                    text: "Success",
+                    icon: Icon(
+                      Icons.check_circle,
+                      color: Colors.white,
+                    ),
+                    color: AppColors.green)
+              },
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: context.percentHeight * 10,
           child: ElasticIn(
             duration: const Duration(milliseconds: 1000),
             child: GestureDetector(

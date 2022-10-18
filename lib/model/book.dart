@@ -1,43 +1,76 @@
-class Book {
-  const Book({
-    required this.bookId,
-    required this.title,
-    required this.author,
-    required this.image,
-    required this.normalPrice,
-    required this.discountedPrice,
-    required this.description,
-    required this.category,
-    required this.publication,
-  });
-  final String bookId;
-  final String title;
-  final String author;
-  final String image;
-  final int normalPrice;
-  final int discountedPrice;
-  final String description;
-  final String category;
-  final String publication;
+import 'package:boiwalaa/model/author.dart';
+import 'package:boiwalaa/model/category.dart';
+import 'package:boiwalaa/model/review.dart';
+
+import 'publication.dart';
+
+enum CoverType {
+  paperBack,
+  hardCover,
 }
 
-final List<String> categoryList = [
-  "Bangla",
-  "English",
-  "Computer",
-  "Programming",
-  "History",
-  "Drama",
-  "Romantic",
-  "Motivation",
-  "Social"
+enum Language { bangla, english }
+
+class BookModel {
+  const BookModel({
+    required this.bookId,
+    required this.bookName,
+    required this.authors,
+    this.translators,
+    required this.image,
+    required this.normalPrice,
+    required this.discountedPercent,
+    required this.description,
+    required this.categories,
+    required this.publication,
+    this.coverType = CoverType.paperBack,
+    this.language = Language.bangla,
+    this.edition = "",
+    this.isbnNumber = "",
+    this.soldQuantity = 0,
+    this.reviews,
+    this.addedTime,
+    this.pageNumber = 0,
+    this.stock = 5,
+  });
+  final String bookId;
+  final String bookName;
+  final List<AuthorModel> authors;
+  final List<AuthorModel>? translators;
+  final String image;
+  final int normalPrice;
+  final int discountedPercent;
+  final String description;
+  final List<CategoryModel> categories;
+  final PublicationModel publication;
+  final CoverType coverType;
+  final Language language;
+  final String edition;
+  final String isbnNumber;
+  final int soldQuantity;
+  final List<ReviewModel>? reviews;
+  final DateTime? addedTime;
+  final int pageNumber;
+  final int stock;
+}
+
+final List<CategoryModel> categoryList = [
+  CategoryModel(title: "Bangla"),
+  CategoryModel(title: "English"),
+  CategoryModel(title: "Computer"),
+  CategoryModel(title: "Programming"),
+  CategoryModel(title: "History"),
+  CategoryModel(title: "Drama"),
+  CategoryModel(title: "Romantic"),
+  CategoryModel(title: "Motivation"),
+  CategoryModel(title: "Social")
 ];
 
-final List<String> publicationList = [
-  "Adorsho Publication",
-  "Profile Publication",
-  "Swore-o Publication",
-  "Somokalin Publication",
+final List<PublicationModel> publicationList = [
+  PublicationModel(pubName: "Adorsho Publication"),
+  PublicationModel(pubName: "Profile Publication"),
+  PublicationModel(pubName: "Swore-o Publication"),
+  PublicationModel(pubName: "Somokalin Publication"),
 ];
 
 // void addToCategoryList(Book book) {
@@ -51,126 +84,148 @@ final List<String> publicationList = [
 //   }
 // }
 
-final demoBooks = const [
-  Book(
+final demoBooks = [
+  BookModel(
     bookId: "1",
-    title: "১ মিনিটে ইংরেজি",
-    author: "এনামুল কবীর সরকার",
+    bookName: "১ মিনিটে ইংরেজি",
+    authors: [AuthorModel(authorName: "এনামুল কবীর সরকার")],
     image: "assets/images/1-minte.jpg",
     normalPrice: 300,
-    discountedPrice: 250,
+    discountedPercent: 250,
     description: "This is a nice book.",
-    category: "bangla",
-    publication: "Adorsho Publication",
+    categories: [
+      CategoryModel(title: "Bangla"),
+    ],
+    publication: PublicationModel(pubName: "Adorsho Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "2",
-    title: "গ্রে লেডি অব বাগরাম",
-    author: "আফিয়া সিদ্দিকী",
+    bookName: "গ্রে লেডি অব বাগরাম",
+    authors: [AuthorModel(authorName: "আফিয়া সিদ্দিকী")],
     image: "assets/images/Aafia-front.jpg",
     normalPrice: 300,
-    discountedPrice: 234,
+    discountedPercent: 234,
     description: "This is a nice book.",
-    category: "bangla",
-    publication: "Adorsho Publication",
+    categories: [
+      CategoryModel(title: "Bangla"),
+    ],
+    publication: PublicationModel(pubName: "Adorsho Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "3",
-    title: "কালকের আন্দোলন, আজকের আন্দোলন",
-    author: "অনুপম দেবাশীষ রায়",
+    bookName: "কালকের আন্দোলন, আজকের আন্দোলন",
+    authors: [AuthorModel(authorName: "অনুপম দেবাশীষ রায়")],
     image: "assets/images/ajker-andolon.png",
     normalPrice: 300,
-    discountedPrice: 204,
+    discountedPercent: 204,
     description: "This is a nice book",
-    category: "bangla",
-    publication: "Adorsho Publication",
+    categories: [
+      CategoryModel(title: "Bangla"),
+    ],
+    publication: PublicationModel(pubName: "Adorsho Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "4",
-    title: "এখানে আকাশ নীল",
-    author: "রবিউল করিম মৃদুল",
+    bookName: "এখানে আকাশ নীল",
+    authors: [AuthorModel(authorName: "রবিউল করিম মৃদুল")],
     image: "assets/images/Akhane-akash-nil.png",
     normalPrice: 300,
-    discountedPrice: 240,
+    discountedPercent: 240,
     description: "This is a nice book.",
-    category: "bangla",
-    publication: "Adorsho Publication",
+    categories: [
+      CategoryModel(title: "Bangla"),
+    ],
+    publication: PublicationModel(pubName: "Adorsho Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "5",
-    title: "একটু গভিরে এসো",
-    author: "নবায়ন পারভেজ",
+    bookName: "একটু গভিরে এসো",
+    authors: [AuthorModel(authorName: "নবায়ন পারভেজ")],
     image: "assets/images/Aktu-gobare-aso.jpg",
     normalPrice: 400,
-    discountedPrice: 240,
+    discountedPercent: 240,
     description: "This is a nice book.",
-    category: "bangla",
-    publication: "Adorsho Publication",
+    categories: [
+      CategoryModel(title: "Bangla"),
+    ],
+    publication: PublicationModel(pubName: "Adorsho Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "6",
-    title: "অ্যালগরিদম ডিজাইন",
-    author: "অরিন্দম পাল",
+    bookName: "অ্যালগরিদম ডিজাইন",
+    authors: [AuthorModel(authorName: "অরিন্দম পাল")],
     image: "assets/images/Algoridom-Design-1-1.jpg",
     normalPrice: 230,
-    discountedPrice: 180,
+    discountedPercent: 180,
     description: "This is a nice book.",
-    category: "bangla",
-    publication: "Adorsho Publication",
+    categories: [
+      CategoryModel(title: "Bangla"),
+    ],
+    publication: PublicationModel(pubName: "Adorsho Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "7",
-    title: "পানকৌড়ির রক্ত",
-    author: "আল মাহমুদ",
+    bookName: "পানকৌড়ির রক্ত",
+    authors: [AuthorModel(authorName: "আল মাহমুদ")],
     image: "assets/images/pankari.jpg",
     normalPrice: 240,
-    discountedPrice: 220,
+    discountedPercent: 220,
     description: "This is a nice book.",
-    category: "English",
-    publication: "Profile Publication",
+    categories: [
+      CategoryModel(title: "English"),
+    ],
+    publication: PublicationModel(pubName: "Profile Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "8",
-    title: "অ্যাম্বাসেডর",
-    author: "আবদুস সালাম জাইফ",
+    bookName: "অ্যাম্বাসেডর",
+    authors: [AuthorModel(authorName: "আবদুস সালাম জাইফ")],
     image: "assets/images/Ambassador-Front.jpg",
     normalPrice: 180,
-    discountedPrice: 150,
+    discountedPercent: 150,
     description: "This is a nice book",
-    category: "English",
-    publication: "Profile Publication",
+    categories: [
+      CategoryModel(title: "English"),
+    ],
+    publication: PublicationModel(pubName: "Profile Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "9",
-    title: "এটিচিউড ইজ এভরিথিং",
-    author: "ত্বাইরান আবির",
+    bookName: "এটিচিউড ইজ এভরিথিং",
+    authors: [AuthorModel(authorName: "ত্বাইরান আবির")],
     image: "assets/images/Attitude-Is-Everything-Front.jpg",
     normalPrice: 230,
-    discountedPrice: 180,
+    discountedPercent: 180,
     description: "This is a nice book.",
-    category: "English",
-    publication: "Profile Publication",
+    categories: [
+      CategoryModel(title: "English"),
+    ],
+    publication: PublicationModel(pubName: "Profile Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "10",
-    title: "আয়না",
-    author: "আফজাল গুরু",
+    bookName: "আয়না",
+    authors: [AuthorModel(authorName: "আফজাল গুরু")],
     image: "assets/images/Ayna-Front.jpg",
     normalPrice: 120,
-    discountedPrice: 100,
+    discountedPercent: 100,
     description: "This is a nice book.",
-    category: "English",
-    publication: "Profile Publication",
+    categories: [
+      CategoryModel(title: "English"),
+    ],
+    publication: PublicationModel(pubName: "Profile Publication"),
   ),
-  Book(
+  BookModel(
     bookId: "11",
-    title: "আজাদির লড়াই",
-    author: "মুহাম্মদ নাফিস নাওয়ার",
+    bookName: "আজাদির লড়াই",
+    authors: [AuthorModel(authorName: "মুহাম্মদ নাফিস নাওয়ার")],
     image: "assets/images/Azadi-Front.jpg",
     normalPrice: 230,
-    discountedPrice: 190,
+    discountedPercent: 190,
     description: "This is a nice book.",
-    category: "Social",
-    publication: "Somokalin Publication",
+    categories: [
+      CategoryModel(title: "Social"),
+    ],
+    publication: PublicationModel(pubName: "Somokalin Publication"),
   )
 ];

@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:badges/badges.dart';
+import 'package:boiwalaa/controller/user_controller.dart';
+import 'package:boiwalaa/view/main_screen/main_screen.dart';
 import '/controller/auth_controller.dart';
 import '/model/address.dart';
 import '/model/cart.dart';
@@ -31,6 +33,8 @@ class _FlipCardState extends State<FlipCard> {
   final cartController = Get.find<CartController>();
   final orderController = Get.find<OrderController>();
   final authController = Get.find<AuthController>();
+  final userController = Get.find<UserController>();
+
   TextEditingController country = TextEditingController();
   TextEditingController state = TextEditingController();
   TextEditingController city = TextEditingController();
@@ -63,25 +67,25 @@ class _FlipCardState extends State<FlipCard> {
 
   @override
   void initState() {
-    name.text = authController.name;
-    contactNumber.text = authController.contactNumber;
-    email.text = authController.email;
+    name.text = userController.user!.name;
+    contactNumber.text = userController.user!.contactNumber!;
+    email.text = userController.user!.email;
     selectedRadio = 1;
-    if (authController.addressList.isNotEmpty &&
-        authController.addressList[0].country != "") {
-      country.text = authController.addressList[0].country;
+    if (userController.addressList.isNotEmpty &&
+        userController.addressList[0].country != "") {
+      country.text = userController.addressList[0].country;
     }
-    if (authController.addressList.isNotEmpty &&
-        authController.addressList[0].state != "") {
-      state.text = authController.addressList[0].state;
+    if (userController.addressList.isNotEmpty &&
+        userController.addressList[0].state != "") {
+      state.text = userController.addressList[0].state;
     }
-    if (authController.addressList.isNotEmpty &&
-        authController.addressList[0].city != "") {
-      city.text = authController.addressList[0].city;
+    if (userController.addressList.isNotEmpty &&
+        userController.addressList[0].city != "") {
+      city.text = userController.addressList[0].city;
     }
-    if (authController.addressList.isNotEmpty &&
-        authController.addressList[0].detailAddress != "") {
-      detailsAddress.text = authController.addressList[0].detailAddress;
+    if (userController.addressList.isNotEmpty &&
+        userController.addressList[0].detailAddress != "") {
+      detailsAddress.text = userController.addressList[0].detailAddress;
     }
     super.initState();
   }
@@ -92,10 +96,10 @@ class _FlipCardState extends State<FlipCard> {
     });
   }
 
-  Color _toggleBadgeColor(Address address) {
+  Color _toggleBadgeColor(AddressModel address) {
     // setState(() {
     // for (Address newAddress in authController.addressList) {
-    if (authController.addressList.indexOf(address) == selectedBadge) {
+    if (userController.addressList.indexOf(address) == selectedBadge) {
       return AppColors.deepAmber;
     }
     // }
@@ -103,10 +107,10 @@ class _FlipCardState extends State<FlipCard> {
     // });
   }
 
-  Color _toggleBadgeContentColor(Address address) {
+  Color _toggleBadgeContentColor(AddressModel address) {
     // setState(() {
-    // for (Address newAddress in authController.addressList) {
-    if (authController.addressList.indexOf(address) == selectedBadge) {
+    // for (Address newAddress in userController.addressList) {
+    if (userController.addressList.indexOf(address) == selectedBadge) {
       return Colors.white;
     }
     // }
@@ -178,7 +182,7 @@ class _FlipCardState extends State<FlipCard> {
                       width: context.percentWidth * 90,
                       height: context.percentHeight * 63,
                       decoration: BoxDecoration(
-                        color: AppColors.lightAmber,
+                        color: Colors.white,
                         borderRadius:
                             BorderRadius.circular(context.percentWidth * 5),
                       ),
@@ -324,17 +328,17 @@ class _FlipCardState extends State<FlipCard> {
                                       //     ),
                                       //   ),
                                       // ),
-                                      if (authController.addressList.isNotEmpty)
+                                      if (userController.addressList.isNotEmpty)
                                         SizedBox(
                                           height: context.percentHeight * 5,
                                           width: context.percentWidth * 80,
                                           child: ListView.builder(
                                               scrollDirection: Axis.horizontal,
-                                              itemCount: authController
+                                              itemCount: userController
                                                   .addressList.length,
                                               itemBuilder: (context, index) {
-                                                final address = authController
-                                                    .addressList[index];
+                                                final address = userController
+                                                    .obsAddressList[index];
                                                 return GestureDetector(
                                                   onTap: () {
                                                     setState(() {
@@ -365,10 +369,10 @@ class _FlipCardState extends State<FlipCard> {
                                                               .scale,
                                                       elevation: 0,
                                                       shape: BadgeShape.square,
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                              horizontal: 15,
-                                                              vertical: 2),
+                                                      padding: const EdgeInsets
+                                                              .symmetric(
+                                                          horizontal: 15,
+                                                          vertical: 2),
                                                       borderRadius: BorderRadius
                                                           .circular(context
                                                                   .percentWidth *
@@ -376,13 +380,12 @@ class _FlipCardState extends State<FlipCard> {
                                                       badgeColor:
                                                           _toggleBadgeColor(
                                                               address),
-                                                      badgeContent:
-                                                          address.addressName
-                                                              .text
-                                                              .color(
-                                                                  _toggleBadgeContentColor(
-                                                                      address))
-                                                              .makeCentered(),
+                                                      badgeContent: address
+                                                          .addressName.text
+                                                          .color(
+                                                              _toggleBadgeContentColor(
+                                                                  address))
+                                                          .makeCentered(),
                                                       // : "${queryPublicationList[index]}"
                                                       //     .text
                                                       //     .makeCentered(),
@@ -414,8 +417,8 @@ class _FlipCardState extends State<FlipCard> {
                                           detailsAddressFocusNode.unfocus();
                                         },
                                         hintText: "Detail Address",
-                                        fillColor:
-                                            AppColors.deepAmber.withOpacity(0.2),
+                                        fillColor: AppColors.deepAmber
+                                            .withOpacity(0.2),
                                         borderColor: AppColors.deepAmber,
                                       ),
                                       // HeightBox(context.percentHeight * 2),
@@ -447,7 +450,8 @@ class _FlipCardState extends State<FlipCard> {
                                               Radio(
                                                 value: 1,
                                                 groupValue: selectedRadio,
-                                                activeColor: AppColors.deepAmber,
+                                                activeColor:
+                                                    AppColors.deepAmber,
                                                 onChanged: (val) {
                                                   setSelectedRadio(val);
                                                   setState(() {
@@ -464,7 +468,8 @@ class _FlipCardState extends State<FlipCard> {
                                               Radio(
                                                 value: 2,
                                                 groupValue: selectedRadio,
-                                                activeColor: AppColors.deepAmber,
+                                                activeColor:
+                                                    AppColors.deepAmber,
                                                 onChanged: (val) {
                                                   setSelectedRadio(val);
                                                   setState(() {
@@ -473,7 +478,8 @@ class _FlipCardState extends State<FlipCard> {
                                                   });
                                                 },
                                               ),
-                                              const Text("Sundarban Courier Service"),
+                                              const Text(
+                                                  "Sundarban Courier Service"),
                                             ],
                                           ),
                                           HeightBox(context.percentHeight * 15),
@@ -500,7 +506,7 @@ class _FlipCardState extends State<FlipCard> {
                                           height: context.percentWidth * 50,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                                color: AppColors.deepAmber,
+                                                color: Colors.black,
                                                 width: 2,
                                                 style: BorderStyle.solid),
                                             borderRadius: BorderRadius.all(
@@ -521,8 +527,7 @@ class _FlipCardState extends State<FlipCard> {
                                                     Text(
                                                       'Total: ',
                                                       style: TextStyle(
-                                                        color:
-                                                            AppColors.deepAmber,
+                                                        color: Colors.black,
                                                         fontSize: context
                                                                 .percentWidth *
                                                             4,
@@ -531,8 +536,7 @@ class _FlipCardState extends State<FlipCard> {
                                                     Text(
                                                       'Tk.${cartController.sumCartPrice()}',
                                                       style: TextStyle(
-                                                        color:
-                                                            AppColors.deepAmber,
+                                                        color: Colors.black,
                                                         fontSize: context
                                                                 .percentWidth *
                                                             4,
@@ -541,7 +545,7 @@ class _FlipCardState extends State<FlipCard> {
                                                   ],
                                                 ),
                                                 const Divider(
-                                                  color: AppColors.deepAmber,
+                                                  color: Colors.black,
                                                 ),
                                                 Row(
                                                   mainAxisAlignment:
@@ -551,8 +555,7 @@ class _FlipCardState extends State<FlipCard> {
                                                     Text(
                                                       'Delivery Charge: ',
                                                       style: TextStyle(
-                                                        color:
-                                                            AppColors.deepAmber,
+                                                        color: Colors.black,
                                                         fontSize: context
                                                                 .percentWidth *
                                                             4,
@@ -561,8 +564,7 @@ class _FlipCardState extends State<FlipCard> {
                                                     Text(
                                                       'Tk.$deliveryCharge',
                                                       style: TextStyle(
-                                                        color:
-                                                            AppColors.deepAmber,
+                                                        color: Colors.black,
                                                         fontSize: context
                                                                 .percentWidth *
                                                             4,
@@ -596,7 +598,7 @@ class _FlipCardState extends State<FlipCard> {
                                                 //   ],
                                                 // ),
                                                 const Divider(
-                                                  color: AppColors.deepAmber,
+                                                  color: Colors.black,
                                                 ),
                                                 Row(
                                                   mainAxisAlignment:
@@ -606,8 +608,7 @@ class _FlipCardState extends State<FlipCard> {
                                                     Text(
                                                       'Promo Code Discount: ',
                                                       style: TextStyle(
-                                                        color:
-                                                            AppColors.deepAmber,
+                                                        color: Colors.black,
                                                         fontSize: context
                                                                 .percentWidth *
                                                             4,
@@ -616,8 +617,7 @@ class _FlipCardState extends State<FlipCard> {
                                                     Text(
                                                       '-Tk.0',
                                                       style: TextStyle(
-                                                        color:
-                                                            AppColors.deepAmber,
+                                                        color: Colors.black,
                                                         fontSize: context
                                                                 .percentWidth *
                                                             4,
@@ -626,7 +626,7 @@ class _FlipCardState extends State<FlipCard> {
                                                   ],
                                                 ),
                                                 const Divider(
-                                                  color: AppColors.deepAmber,
+                                                  color: Colors.black,
                                                 ),
                                                 Row(
                                                   mainAxisAlignment:
@@ -636,8 +636,7 @@ class _FlipCardState extends State<FlipCard> {
                                                     Text(
                                                       'Payable Total: ',
                                                       style: TextStyle(
-                                                        color:
-                                                            AppColors.deepAmber,
+                                                        color: Colors.black,
                                                         fontSize: context
                                                                 .percentWidth *
                                                             4,
@@ -648,8 +647,7 @@ class _FlipCardState extends State<FlipCard> {
                                                     Text(
                                                       'Tk.$orderTotalPrice',
                                                       style: TextStyle(
-                                                        color:
-                                                            AppColors.deepAmber,
+                                                        color: Colors.black,
                                                         fontSize: context
                                                                 .percentWidth *
                                                             4,
@@ -773,8 +771,8 @@ class _FlipCardState extends State<FlipCard> {
                                     : orderController.deliveryPlace =
                                         DeliveryPlace.outside;
                                 if (saveAddress == true) {
-                                  authController.addressList.add(
-                                    Address(
+                                  userController.addressList.add(
+                                    AddressModel(
                                         addressName: "My Address",
                                         country: country.text,
                                         state: state.text,
@@ -786,13 +784,14 @@ class _FlipCardState extends State<FlipCard> {
                               _flip();
                             }
                           : () {
-                              final List<CartItem> orders = [];
+                              final List<CartItemModel> orders = [];
                               final f = DateFormat("yyyy-MM-dd hh:mm");
                               final dateTime = f.format(DateTime.now());
-                              for (CartItem cartItem in cartController.cart) {
+                              for (CartItemModel cartItem
+                                  in cartController.cart) {
                                 orders.add(cartItem);
                               }
-                              final orderItem = OrderItem(
+                              final orderItem = OrderItemModel(
                                 orderID: "BO#${orderID()}",
                                 name: name.text,
                                 email: email.text,
@@ -839,8 +838,8 @@ class _FlipCardState extends State<FlipCard> {
                                           : _deliveryPlace =
                                               DeliveryPlace.outside;
                                       if (saveAddress == true) {
-                                        authController.addressList.add(
-                                          Address(
+                                        userController.addressList.add(
+                                          AddressModel(
                                               addressName: "My Address",
                                               country: country.text,
                                               state: state.text,
@@ -852,24 +851,21 @@ class _FlipCardState extends State<FlipCard> {
                                       _flip();
                                     });
                                   },
-                                  child: "Pay Now"
-                                      .text
-                                      .color(AppColors.backgroundWhite)
-                                      .xl2
-                                      .makeCentered())
+                                  child:
+                                      "Pay Now".text.black.xl2.makeCentered())
                               : Transform(
                                   alignment: Alignment.center,
                                   transform: Matrix4.identity()..rotateY(pi),
                                   child: TextButton(
                                     onPressed: () {
-                                      final List<CartItem> orders = [];
+                                      final List<CartItemModel> orders = [];
                                       final f = DateFormat("yyyy-MM-dd hh:mm");
                                       final dateTime = f.format(DateTime.now());
-                                      for (CartItem cartItem
+                                      for (CartItemModel cartItem
                                           in cartController.cart) {
                                         orders.add(cartItem);
                                       }
-                                      final orderItem = OrderItem(
+                                      final orderItem = OrderItemModel(
                                         orderID: "BO#${orderID()}",
                                         name: name.text,
                                         email: email.text,
@@ -895,11 +891,11 @@ class _FlipCardState extends State<FlipCard> {
                                           timeInSecForIosWeb: 1,
                                           textColor: Colors.white,
                                           fontSize: 16.0);
-                                      Get.back();
+                                      Get.offAll(() => const MainScreen());
                                     },
                                     child: "Confirm Order"
                                         .text
-                                        .color(AppColors.backgroundWhite)
+                                        .black
                                         .xl2
                                         .makeCentered(),
                                   ),

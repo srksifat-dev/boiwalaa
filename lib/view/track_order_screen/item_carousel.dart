@@ -10,7 +10,7 @@ class ItemCarousel extends StatefulWidget {
     Key? key,
     required this.cartItems,
   }) : super(key: key);
-  final List<CartItem> cartItems;
+  final List<CartItemModel> cartItems;
 
   @override
   _ItemCarouselState createState() => _ItemCarouselState();
@@ -43,7 +43,7 @@ class _ItemCarouselState extends State<ItemCarousel> {
               height: context.percentWidth * 25,
               width: double.infinity,
               decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: Colors.white,
                   borderRadius:
                       BorderRadius.circular(context.percentWidth * 3)),
               child: Row(
@@ -70,7 +70,7 @@ class _ItemCarouselState extends State<ItemCarousel> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: <Widget>[
                         Text(
-                          widget.cartItems[itemIndex].book.title,
+                          widget.cartItems[itemIndex].book.bookName,
                           textAlign: TextAlign.start,
                           overflow: TextOverflow.ellipsis,
                           maxLines: 1,
@@ -79,21 +79,32 @@ class _ItemCarouselState extends State<ItemCarousel> {
                             fontSize: context.percentWidth * 5,
                           ),
                         ),
-                        Text(
-                          widget.cartItems[itemIndex].book.author,
-                          style: TextStyle(
-                            color: Colors.grey,
-                            fontSize: context.percentWidth * 4,
+                        SizedBox(
+                          width: context.percentWidth * 50,
+                          height: 20,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemCount:
+                                widget.cartItems[itemIndex].book.authors.length,
+                            itemBuilder: (context, index) => Text(
+                              widget.cartItems[itemIndex].book.authors[index]
+                                  .authorName,
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: context.percentWidth * 4,
+                              ),
+                            ),
                           ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "${widget.cartItems[itemIndex].book.discountedPrice}",
+                              "${widget.cartItems[itemIndex].book.discountedPercent}৳",
                               style: TextStyle(
-                            color: Colors.black,
-                            fontSize: context.percentWidth * 4,
+                                color: Colors.black,
+                                fontSize: context.percentWidth * 4,
                               ),
                             ),
                             "x${widget.cartItems[itemIndex].quantity.toString()}"

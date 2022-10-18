@@ -23,7 +23,7 @@ class CartCard extends StatelessWidget {
         padding: EdgeInsets.only(left: context.percentWidth * 3),
         alignment: Alignment.centerLeft,
         decoration: BoxDecoration(
-          color: AppColors.deepAmber,
+          color: Colors.redAccent,
           borderRadius: BorderRadius.circular(context.percentWidth * 3),
         ),
         child: const Icon(
@@ -37,7 +37,7 @@ class CartCard extends StatelessWidget {
         padding: EdgeInsets.only(right: context.percentWidth * 3),
         alignment: Alignment.centerRight,
         decoration: BoxDecoration(
-          color: AppColors.deepAmber,
+          color: Colors.redAccent,
           borderRadius: BorderRadius.circular(context.percentWidth * 3),
         ),
         child: const Icon(
@@ -87,7 +87,7 @@ class CartCard extends StatelessWidget {
         height: context.percentWidth * 25,
         width: double.infinity,
         decoration: BoxDecoration(
-            color: Colors.white,
+            color: Colors.grey[200],
             borderRadius: BorderRadius.circular(context.percentWidth * 3)),
         child: Row(
           children: [
@@ -112,7 +112,7 @@ class CartCard extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   Text(
-                    controller.cart[index].book.title,
+                    controller.cart[index].book.bookName,
                     textAlign: TextAlign.start,
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
@@ -121,12 +121,20 @@ class CartCard extends StatelessWidget {
                       fontSize: context.percentWidth * 5,
                     ),
                   ),
-                  Text(
-                    controller.cart[index].book.author,
-                    style: TextStyle(
-                      color: Colors.grey,
-                      fontSize: context.percentWidth * 4,
-                    ),
+                  SizedBox(
+                    width: context.percentWidth * 50,
+                    height: 20,
+                    child: ListView.builder(
+                      scrollDirection: Axis.horizontal,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: controller.cart[index].book.authors.length, itemBuilder:(context,authorIndex) =>
+                    Text(
+                      controller.cart[index].book.authors[authorIndex].authorName,
+                      style: TextStyle(
+                        color: Colors.grey,
+                        fontSize: context.percentWidth * 4,
+                      ),
+                    ),),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -137,19 +145,19 @@ class CartCard extends StatelessWidget {
                           Text(
                             "${controller.cart[index].book.normalPrice}",
                             style: TextStyle(
-                          decoration: TextDecoration.lineThrough,
-                          color: Colors.red,
-                          fontSize: context.percentWidth * 4,
+                              decoration: TextDecoration.lineThrough,
+                              color: Colors.red,
+                              fontSize: context.percentWidth * 4,
                             ),
                           ),
                           SizedBox(
                             width: context.percentWidth * 4,
                           ),
                           Text(
-                            "${controller.cart[index].book.discountedPrice}",
+                            "${controller.cart[index].book.discountedPercent}",
                             style: TextStyle(
-                          color: Colors.black,
-                          fontSize: context.percentWidth * 4,
+                              color: Colors.black,
+                              fontSize: context.percentWidth * 4,
                             ),
                           ),
                         ],
@@ -172,8 +180,9 @@ class CartCard extends StatelessWidget {
                                   controller.removeProductsFromCart(cartItem);
                                   controller.cart.refresh();
                                 },
-                                child: const Icon(Icons.remove)),
-                            cartItem.quantity.toString()
+                                child: const Icon(Icons.remove_circle)),
+                            cartItem.quantity
+                                .toString()
                                 .text
                                 .size(context.percentWidth * 4)
                                 .make(),
@@ -182,7 +191,7 @@ class CartCard extends StatelessWidget {
                                   controller.addProductsToCart(book);
                                   controller.cart.refresh();
                                 },
-                                child: const Icon(Icons.add)),
+                                child: const Icon(Icons.add_circle)),
                           ],
                         ),
                       ),

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
-Future showDetailDialog(BuildContext context, Book book) {
+Future showDetailDialog(BuildContext context, BookModel book) {
   final controller = Get.put(CartController());
 
   return showGeneralDialog(
@@ -52,7 +52,7 @@ Future showDetailDialog(BuildContext context, Book book) {
                                   width: context.percentWidth * 80,
                                   height: 30,
                                   child: Text(
-                                    book.title,
+                                    book.bookName,
                                     textAlign: TextAlign.center,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
@@ -65,7 +65,7 @@ Future showDetailDialog(BuildContext context, Book book) {
                             10.heightBox,
                             ElasticIn(
                                 duration: const Duration(milliseconds: 1000),
-                                child: "by ${book.author}"
+                                child: "by ${book.authors}"
                                     .text
                                     .xl2
                                     .color(Colors.grey)
@@ -85,7 +85,7 @@ Future showDetailDialog(BuildContext context, Book book) {
                                               TextDecoration.lineThrough))
                                       .make(),
                                   10.widthBox,
-                                  "${book.discountedPrice}".text.xl3.make()
+                                  "${book.discountedPercent}".text.xl3.make()
                                 ],
                               ),
                             ),

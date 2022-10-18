@@ -20,7 +20,7 @@ Widget addressCard(
     ),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(context.percentWidth * 3),
-      color: AppColors.green.withOpacity(0.2),
+      color: Colors.grey[200],
     ),
     width: double.infinity,
     child: Column(

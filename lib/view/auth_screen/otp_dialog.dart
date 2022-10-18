@@ -5,9 +5,6 @@ import 'package:flutter/material.dart';
 
 Future showOtpDialog({
   required BuildContext context,
-  required Widget button,
-  required TextEditingController otpController,
-  required FocusNode otpFocusNode,
 }) {
   return showGeneralDialog(
     context: context,
@@ -16,9 +13,7 @@ Future showOtpDialog({
       return Material(
         color: Colors.transparent,
         child: OtpDialogContent(
-          button: button,
-          otpController: otpController,
-          otpFocusNode: otpFocusNode,
+          
         ),
       );
     },
